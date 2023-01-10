@@ -15,7 +15,7 @@ private:
 public:
 	Enemy(COORD spawn);
 
-	void Logic(Map* pacman_map);
+	bool Logic(Map* pacman_map, COORD playerPosition);
 	void Draw();
 };
 
