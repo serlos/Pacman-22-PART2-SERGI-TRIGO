@@ -1,6 +1,9 @@
 #include "Enemy.h"
 #include <vector>
 #include "TimeManager.h"
+#include <thread>
+#include <cstdlib>
+
 
 /// <summary>
 /// Sets the needed variables
@@ -29,6 +32,8 @@ int player_points = 0;
 USER_INPUTS input = USER_INPUTS::NONE;
 bool run = true;
 bool win = false;
+int lives = 1;
+
 
 int main()
 {
@@ -45,12 +50,16 @@ void Setup()
 {
     std::cout.sync_with_stdio(false);
 
+
     srand(time(NULL));
 
     int enemy_count = 0;
     
+
+    
     std::cout << "¿Cuantos enemigos quieres?" << std::endl;
     std::cin >> enemy_count;
+
 
     for (size_t i = 0; i < enemy_count; i++)
     {
@@ -108,13 +117,15 @@ void Logic()
             if (enemigos[i].Logic(&pacman_map, playerPos))
             {
                 playerDie = true;
+                lives--;
             }
         }
         if (playerDie)
-        {
+        {            
             player_x = pacman_map.spawn_player.X;
             player_y = pacman_map.spawn_player.Y;
         }
+
 
         int player_y_new = player_y;
         int player_x_new = player_x;
@@ -169,10 +180,13 @@ void Logic()
     }
 }
 
+
+
 void Draw()
 {
     ConsoleUtils::Console_SetPos(0,0);
     pacman_map.Draw();
+
     for (size_t i = 0; i < enemigos.size(); i++)
     {
         enemigos[i].Draw();
@@ -186,11 +200,23 @@ void Draw()
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
+    std::cout << "Lives: " << lives << std::endl;
     if (win)
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;
     }
+    
+    if(lives ==0)
+    {
+       
+        
+        std::cout << "Game over!" << std::endl;
+        exit(0);
+       
+    
+    }
+     
 
     TimeManager::getInstance().nextFrame();
 }

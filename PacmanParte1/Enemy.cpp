@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include <thread>
+
 
 Enemy::Enemy(COORD spawn)
 {
@@ -50,4 +52,5 @@ void Enemy::Draw()
 	ConsoleUtils::Console_SetPos(position);
 	ConsoleUtils::Console_SetColor(foreground, background);
 	std::cout << character;
+
 }
